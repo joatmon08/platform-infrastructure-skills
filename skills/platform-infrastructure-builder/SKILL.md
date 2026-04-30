@@ -230,7 +230,7 @@ When deploying to EKS, ALWAYS use the AWS provider with
 configure the Kubernetes and Helm providers. 
 Never use local kubeconfig files.
 
-### Generate backend.tf file
+### 2.1 Generate backend.tf file
 
 - Ask user for the HCP Terraform organization and project for deployment
 - Suggest a workspace name based on current repository name.
@@ -248,7 +248,7 @@ terraform {
 }
 ```
 
-### AWS Provider Credentials & Region
+### 2.2 AWS Provider Credentials & Region
 
 Provider credentials are set up through HCP using a variable set.
 
@@ -271,7 +271,7 @@ variable "region" {
 }
 ```
 
-### Tagging
+### 2.3 Tagging
 
 The following tags are required for the AWS provider's `default_tags`.
 If not specified, ask the user.
@@ -427,7 +427,7 @@ Before proceeding to Phase 5, verify:
 
 ## Phase 5: Compliance Review
 
-### Security Review
+### 5.1 Security Review
 
 Review the Terraform configuration and provide a list of suggestions
 on how to secure it better. Consider:
@@ -439,7 +439,7 @@ on how to secure it better. Consider:
 - Public exposure of resources
 - Logging and monitoring configuration
 
-### Cost Estimation
+### 5.2 Cost Estimation
 
 Use Infracost CLI to provide cost estimates for the deployed infrastructure:
 
@@ -490,12 +490,12 @@ Verify the configuration meets organizational requirements:
 
 If the user reports a failed run, follow this systematic approach:
 
-### 1. Analyze Error Logs
+### 6.1 Analyze Error Logs
 - Go to HCP Terraform run and review the error output
 - Download the diagnostic file if available
 - Upload the diagnostic file to IBM Bob for analysis
 
-### 2. Common Error Patterns & Solutions
+### 6.2 Common Error Patterns & Solutions
 
 #### Kubernetes Errors
 
@@ -549,7 +549,7 @@ If the user reports a failed run, follow this systematic approach:
 - Check network connectivity
 - Verify dependent resources are healthy
 
-### 3. Debugging Commands
+### 6.3 Debugging Commands
 
 ```bash
 # Kubernetes debugging
@@ -602,15 +602,13 @@ This requires platform team intervention to:
 Reach out to your platform engineering team for help.
 ```
 
-
-
 ---
 
 ## Phase 7: Rollback & Recovery
 
 If a deployment fails or needs to be rolled back, follow this systematic approach:
 
-### 1. Assess the Situation
+### 7.1 Assess the Situation
 
 Determine the scope and impact:
 - Which resources were successfully created?
@@ -618,7 +616,7 @@ Determine the scope and impact:
 - Are there any resources in an inconsistent state?
 - Is the failure blocking other operations?
 
-### 2. Terraform State Management
+### 7.2 Terraform State Management
 
 **For Stuck Resources:**
 ```bash
@@ -638,7 +636,7 @@ terraform import <resource_address> <resource_id>
 # Force unlock only if absolutely necessary and no other runs are active
 ```
 
-### 3. Rollback Strategies
+### 7.3 Rollback Strategies
 
 **Option A: Destroy Failed Resources**
 ```bash
@@ -660,7 +658,7 @@ For resources not managed by Terraform state:
 2. Use AWS CLI or Console to manually delete
 3. Update Terraform state if needed
 
-### 4. Kubernetes-Specific Rollback
+### 7.4 Kubernetes-Specific Rollback
 
 **For Failed Helm Releases:**
 ```bash
@@ -683,7 +681,7 @@ kubectl delete <resource-type> <resource-name> -n <namespace>
 kubectl delete namespace <namespace>
 ```
 
-### 5. Recovery Checklist
+### 7.5 Recovery Checklist
 
 After rollback, verify:
 - [ ] All failed resources removed from AWS/Kubernetes
@@ -693,7 +691,7 @@ After rollback, verify:
 - [ ] Root cause documented
 - [ ] Prevention measures identified
 
-### 6. Post-Rollback Actions
+### 7.6 Post-Rollback Actions
 
 1. **Document the incident:**
    - What failed and why

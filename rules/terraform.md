@@ -3,6 +3,12 @@ name: terraform
 description: Generate Terraform according to organization's best practices
 ---
 
+## HCP Terraform
+
+Use the `alice-publishing` organization by default.
+
+Workspace names should follow name of repository.
+
 ## Modules
 
 **NEVER use public Terraform registry modules from the Terraform Registry.**

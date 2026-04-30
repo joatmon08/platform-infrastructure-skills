@@ -3,9 +3,16 @@ name: kubernetes-aws
 description: Design Kubernetes resources on AWS EKS clusters
 ---
 
-- Do not use `nginx` as Ingress. Use `alb` instead.
+## Cluster Configuration
+
 - Create Kubernetes cluster with publicly available endpoint
 - Deploy EDR onto cluster using the `bash .ibm/edr.sh` command
+
+## Ingress
+
+**NEVER use nginx. Always use ALB.**
+
+- `search_private_modules` for a Terraform module to attach the ALB to a Cloudflare DNS record.
 - If the implementation has an ingress, include an output that retrieves the hostname of the ingress.
   ```hcl
   output "helloworld_agent_server_url" {
