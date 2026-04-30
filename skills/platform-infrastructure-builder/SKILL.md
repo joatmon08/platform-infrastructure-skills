@@ -43,9 +43,9 @@ Before beginning, gather:
 
 # Process
 
-## Phase 1: Deep Research and Planning
+## Phase 0: Gather Information
 
-### Gather information
+Get the following information from the user:
 
 - HCP Terraform organization: default `alice-publishing`
 - HCP Terraform project: default `applications`
@@ -55,7 +55,15 @@ Before beginning, gather:
 - Project
 - Purpose
 
-### Identify required infrastructure resources
+Before proceeding to Phase 1, verify:
+- [ ] User has specified all information for HCP Terraform
+- [ ] User has specified all information for tags
+
+## Phase 1: Deep Research and Planning
+
+Write the results of this phase to `ARCHITECTURE.md`.
+
+### 1.1 Identify required infrastructure resources
 
 - Search architecture documentation for the use case
   - [AWS Architecture Center](https://aws.amazon.com/architecture/reference-architecture-diagrams)
@@ -77,7 +85,7 @@ AWS Requirements:
 - Create IAM roles and security roups for components.
 - Use AWS ALB for load balancing services, when possible
 
-### Discover official Helm charts
+### 1.2 Discover official Helm charts
 
 - Before identifying resources, search for official Helm charts first:
   1. Check if official Helm charts exist for each service
@@ -99,7 +107,7 @@ Output a table:
 |---------|----------------------|------------|------------|---------|---------------------|
 | Qdrant  | Yes                  | https://qdrant.github.io/qdrant-helm | qdrant | 0.8.4 | `helm repo add qdrant https://qdrant.github.io/qdrant-helm` |
 
-### Discover available Terraform modules
+### 1.3 Discover available Terraform modules
 
 **IMPORTANT: Only use private modules from the organization's registry. Public modules are not vetted for security.**
 
@@ -122,13 +130,13 @@ Output a table:
 | Cloudflare DNS Record | Yes | app.terraform.io/alice-publishing/alb-dns/cloudflare | 0.0.1 |
 | AWS VPC | No | N/A - Use raw aws_vpc resource | N/A |
 
-### Study resources in Kubernetes
+### 1.4 Study resources in Kubernetes
 
 - Prioritize use of an Ingress resource backed by an AWS ALB for public service
 - Create a service account on Kubernetes for each service
 - Each service has its own namespace, do not deploy to default
 
-### Study resources in Terraform
+### 1.5 Study resources in Terraform
 
 - Prioritize the use of ofificial modules and make note of any
 resources that are not in the module. 
@@ -149,9 +157,6 @@ Output a list of Terraform resources, data sources, and modules to use
 to achieve the architecture. For modules, list out the types of resources it
 creates.
 
-When possible, provide an estimated cost. If you cannot find a cost, note 
-that the cost is unknown.
-
 ### Phase Transition Checklist
 
 Before proceeding to Phase 2, verify:
@@ -166,8 +171,14 @@ Only proceed to Phase 2 once user explicitly approves.
 
 ### Example
 
+Example chat:
+
 ```
 User: Deploy a public web application on an existing Kubernetes cluster.
+
+Agent: What HCP Terraform organization and tags would you like to add?
+
+User: HCP Terraform organization: `alice-publishing`, workspace `bobs-book-agent`. Tags: `nonprod` OwnedBy=`rosemary`
 
 Agent: Over HTTP or HTTPS?
 
@@ -181,8 +192,12 @@ Agent: What tags?
 
 User: It is in the `prod` environment and `OwnedBy` `rosemary`.
 
-Agent:
+Agent: I have written the architecture to `ARCHITECTURE.md`.
+```
 
+`ARCHITECTURE.md`
+
+```
 Data sources
 - aws_eks_cluster
 
@@ -192,13 +207,10 @@ Resources
 - helm_release
 
 Module
-- rosemary-production/web-application/kubernetes
+- alice-publishing/web-application/kubernetes
   - kubernetes_service_v1
   - kubernetes_deployment_v1
   - kubernetes_service_account_v1
-
-There is no cost associated with the current plan, as it deploys
-to an existing Kubernetes cluster.
 ```
 
 ---
@@ -375,8 +387,6 @@ output "vpc_id" {
 ---
 
 ## Phase 3: Review and Test
-
-If commands have the `-nocolor` argument, you **must** include them.
 
 Run `terraform init -nocolor` to initialize the state.
 

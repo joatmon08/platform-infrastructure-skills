@@ -1,7 +1,9 @@
 ---
 name: terraform
-description: Design Terraform
+description: Generate Terraform according to organization's best practices
 ---
+
+## Modules
 
 **NEVER use public Terraform registry modules from the Terraform Registry.**
 
@@ -23,3 +25,14 @@ description: Design Terraform
 - ✅ Create local `modules/` for reusable components
 - ✅ Use official provider documentation
 - ✅ Design portable, maintainable infrastructure
+
+## CLI
+
+**ALWAYS add `-no-color` argument to `terraform` when available.**
+
+```
+terraform init -no-color
+terraform validate -no-color
+terraform plan -no-color
+terraform apply -no-color
+```
