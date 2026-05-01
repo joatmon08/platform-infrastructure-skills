@@ -1,6 +1,7 @@
 ---
 name: platform-architect-example
 description: Example for generating an ARCHITECTURE.md file for a web application over HTTPS hosted on AWS that runs in an EC2 instance.
+---
 
 # Architecture Proposal
 

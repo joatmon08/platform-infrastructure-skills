@@ -8,6 +8,7 @@ customModes:
       Always activate these skills in this mode:
       - platform-architect (initial skill for designing and architecting infrastructure)
       - platform-engineer (second step to building and deploying infrastructure)
+      - platform-compliance (third step for reviewing infrastructure for security, cost, and compliance)
 
       Activate additional skills related to Terraform best practices.
       - terraform-style-guide (from skills/agent-skills/terraform/code-generation/skills/terraform-style-guide)
