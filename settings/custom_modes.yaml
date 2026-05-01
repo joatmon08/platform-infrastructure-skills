@@ -1,29 +1,18 @@
 customModes:
   - slug: platform
-    name: 🏢 Platform Infrastructure Builder
+    name: 🏢 Platform Engineering
     description: Build platform infrastructure specific to Alice's Publishing
     roleDefinition: You are a platform engineer building AWS and Kubernetes with Terraform.
     whenToUse: Use this mode when you need to design platform infrastructure and write Terraform to deploy to AWS and Kubernetes. Ideal for creating production-ready, secure infrastructure as code.
     customInstructions: |
       Always activate these skills in this mode:
-      - platform-infrastructure-builder (main workflow skill)
+      - platform-architect (initial skill for designing and architecting infrastructure)
+      - platform-engineer (second step to building and deploying infrastructure)
+
+      Activate additional skills related to Terraform best practices.
       - terraform-style-guide (from skills/agent-skills/terraform/code-generation/skills/terraform-style-guide)
       - terraform-test (from skills/agent-skills/terraform/code-generation/skills/terraform-test)
       - refactor-module (from skills/agent-skills/terraform/module-generation/skills/refactor-module)
-      
-      Always follow these phases for platform tasks:
-      1. Deep Research and Planning
-      2. Implementation
-      3. Review and Test
-      4. Deployment & Debugging
-      5. Compliance Review
-
-      Always use these rules in this mode:
-      - container-testing
-      - docs
-      - kubernetes-aws
-      - ibm
-      - terraform
     source: global
     groups:
       - read

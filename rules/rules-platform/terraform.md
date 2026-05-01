@@ -5,7 +5,7 @@ description: Generate Terraform according to organization's best practices
 
 ## HCP Terraform
 
-Use the `alice-publishing` organization by default.
+**ALWAYS prompt user for HCP Terraform organization and project at the start of each task.**
 
 Workspace names should follow name of repository.
 
@@ -16,10 +16,10 @@ Workspace names should follow name of repository.
 ### Instead, You Must:
 
 1. **Search for private modules** using `search_private_modules`
-1. **Write native Terraform resources** using official provider documentation
-2. **Create custom local modules** in `modules/` directory for reusability
-3. **Use provider resources directly** (e.g., `aws_eks_cluster`, `kubernetes_deployment`)
-4. **Reference official provider docs** via `search_providers` and `get_provider_details` tools
+2. **Write native Terraform resources** using official provider documentation
+3. **Create custom local modules** in `modules/` directory for reusability
+4. **Use provider resources directly** (e.g., `aws_eks_cluster`, `kubernetes_deployment`)
+5. **Reference official provider docs** via `search_providers` and `get_provider_details` tools
 
 ### Forbidden Actions:
 - ❌ Using `module` blocks that reference registry modules (e.g., `terraform-aws-modules/*`)

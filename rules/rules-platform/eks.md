@@ -1,12 +1,16 @@
 ---
-name: kubernetes-aws
+name: eks
 description: Design Kubernetes resources on AWS EKS clusters
 ---
 
 ## Cluster Configuration
 
-- Create Kubernetes cluster with publicly available endpoint
-- Deploy EDR onto cluster using the `bash .ibm/edr.sh` command
+Create Kubernetes cluster with publicly available endpoint
+
+## Service Deployment
+
+Deploy using Helm and Kubernetes provider for Terraform.
+If a Terraform resource does not exist for a Kubernetes resource, use `kubernetes_manifest_v1`.
 
 ## Ingress
 
