@@ -42,3 +42,7 @@ terraform validate -no-color
 terraform plan -no-color
 terraform apply -no-color
 ```
+
+## Security Scanning
+
+**NEVER use tfsec, as it is part of trivy and not approved. Scans will be done in HCP Terraform.**

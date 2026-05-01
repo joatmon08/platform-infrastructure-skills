@@ -56,7 +56,7 @@ Use Infracost CLI to provide cost estimates for the deployed infrastructure and
 write it to a file:
 
 ```bash
-infracost breakdown --path . > MONTHLY_COST.md
+infracost breakdown --path . --format table > MONTHLY_COST.md
 ```
 
 **Cost Analysis Guidelines:**
