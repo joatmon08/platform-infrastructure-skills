@@ -45,4 +45,6 @@ terraform apply -no-color
 
 ## Security Scanning
 
-**NEVER use tfsec, as it is part of trivy and not approved. Scans will be done in HCP Terraform.**
+**NEVER use tfsec, as it is part of trivy and not approved. Scans will be done in HCP Terraform using Sentinel policy sets.**
+
+For specific organization policies, refer to the [organization's Sentinel policy set](https://github.com/joatmon08/terraform-aws-kubernetes/tree/main/policies).

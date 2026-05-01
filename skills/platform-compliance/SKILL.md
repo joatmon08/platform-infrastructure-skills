@@ -12,6 +12,8 @@ compliant with organization standards.
 
 Provide a security code review, compliance evaluation, and cost assessment of the cloud infrastructure deployed by Terraform.
 
+Output the plan for deploying and implementing infrastructure in a proposal document called `COMPLIANCE_REVIEW.md`.
+
 ---
 
 ## Phase 1: Security Review
@@ -43,13 +45,6 @@ Verify the following:
 - [ ] No public modules used (only private vetted modules)
 - [ ] Kubernetes resources use Helm charts unless otherwise noted
 
-Before proceeding to Phase 3, verify:
-- [ ] User has corrected based on recommendations
-- [ ] User has justified violations with inline comment
-      ```
-      ## Justification: The Helm chart does not contain overrides for an Ingress configuration.
-      ```
-
 ## Phase 3: Cost Estimation
 
 Use Infracost CLI to provide cost estimates for the deployed infrastructure and
@@ -59,6 +54,8 @@ write it to a file:
 infracost breakdown --path . --format table > MONTHLY_COST.md
 ```
 
+If Infracost CLI provides a $0.00 cost estimate, verify with AWS pricing.
+
 **Cost Analysis Guidelines:**
 - Include monthly cost estimates in the review
 - Highlight any resources with significant costs (>$100/month)
@@ -66,15 +63,19 @@ infracost breakdown --path . --format table > MONTHLY_COST.md
 - If Infracost cannot estimate a resource, note "Cost unknown - manual review required"
 - Provide cost optimization recommendations from Infracost output
 
-### Example Output
+### Checklist
 
-```bash
-Estimated Monthly Cost: $245.67
+- [ ] User has corrected high-priority issues based on recommendations
+- [ ] User has justified high-priority violations with inline comment
+      ```
+      ## Justification: The Helm chart does not contain overrides for an Ingress configuration.
+      ```
 
-For breakdown, review MONTHLY_COST.md.
+### Example
 
-Cost Optimization Recommendations:
-- Consider Reserved Instances for EC2 (potential 30% savings)
-- RDS storage can be optimized with gp3 instead of gp2
-- EKS Cluster can be optimized with t3.medium instead of t2.medium
-```
+Refer to `EXAMPLE.md` for a full example of how to structure the compliance review.
+
+## Recovery
+
+If the user does not remediate as per `COMPLIANCE_REVIEW.md`, prompt the user for feedback and suggest
+escalation to the security team.
