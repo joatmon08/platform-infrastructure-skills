@@ -3,11 +3,14 @@ name: terraform
 description: Generate Terraform according to organization's best practices
 ---
 
-## HCP Terraform
+## Providers
 
-**ALWAYS prompt user for HCP Terraform organization and project at the start of each task.**
+**ALWAYS use `get_latest_provider_version` tool before generating Terraform code.**
 
-Workspace names should follow name of repository.
+Before writing any Terraform configuration:
+1. Use `get_latest_provider_version` to fetch the current version
+2. Use the returned version in the `required_providers` block
+3. Format as `~> X.Y` (major.minor) to allow patch updates
 
 ## Modules
 
@@ -31,6 +34,12 @@ Workspace names should follow name of repository.
 - ✅ Create local `modules/` for reusable components
 - ✅ Use official provider documentation
 - ✅ Design portable, maintainable infrastructure
+
+## HCP Terraform
+
+**ALWAYS prompt user for HCP Terraform organization and project at the start of each task.**
+
+Workspace names should follow name of repository.
 
 ## CLI
 
