@@ -39,7 +39,23 @@ Before writing any Terraform configuration:
 
 **ALWAYS prompt user for HCP Terraform organization and project at the start of each task.**
 
-Workspace names should follow name of repository.
+```
+Organization: alice-publishing
+Project: applications
+```
+
+**ALWAYS use `git` CLI to get the HCP Terraform workspace name.**
+
+```
+basename `git rev-parse --show-toplevel`
+```
+
+**ALWAYS warn user if the number of resources for a given state exceeds 500.**
+
+```
+Warning: You are creating more than 500 resources. This exceeds the free tier
+limit of HCP Terraform.
+```
 
 ## CLI
 
@@ -54,6 +70,6 @@ terraform apply -no-color
 
 ## Security Scanning
 
-**NEVER use tfsec, as it is part of trivy and not approved. Scans will be done in HCP Terraform using Sentinel policy sets.**
+**NEVER use tfsec, as not approved. Scans will be done in HCP Terraform using Sentinel policy sets.**
 
 For specific organization policies, refer to the [organization's Sentinel policy set](https://github.com/joatmon08/terraform-aws-kubernetes/tree/main/policies).
