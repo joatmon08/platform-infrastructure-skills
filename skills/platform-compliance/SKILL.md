@@ -47,11 +47,10 @@ Verify the following:
 
 ## Phase 3: Cost Estimation
 
-Use Infracost CLI to provide cost estimates for the deployed infrastructure and
-write it to a file:
+Use Infracost CLI to provide cost estimates for the deployed infrastructure.
 
 ```bash
-infracost breakdown --path . --format table > MONTHLY_COST.md
+infracost breakdown --path . --format table
 ```
 
 If Infracost CLI provides a $0.00 cost estimate, verify with AWS pricing.

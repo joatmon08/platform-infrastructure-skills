@@ -22,7 +22,7 @@ Get the following information from the user:
 
 - HCP Terraform organization: default `alice-publishing`
 - HCP Terraform project: default `applications`
-- Environment: default`nonprod`, can be `nonprod` or `prod`
+- Environment: default `nonprod`, can be `nonprod` or `prod`
 - OwnedBy
 - BusinessUnit
 - Project
@@ -52,22 +52,23 @@ AWS Requirements:
 
 - Create networking (e.g., VPC) or runtime (e.g., EC2 instances) unless otherwise
   specified by the user
-- Store in secrets in AWS Secrets Manager.
-- Create IAM roles and security roups for components.
+- Store secrets in AWS Secrets Manager.
+- Create IAM roles and security groups for components.
 - Use AWS ALB for load balancing services, when possible
 
 ### Discover available Terraform modules and Helm charts
 
 1. Check if private Terraform modules or Helm charts exist for a resource
-  2. Only use raw resources if:
-    - No private module or public Helm chart exists
-    - The module or chart doesn't meet specific requirements
+2. Only use raw resources if:
+   - No private module or public Helm chart exists
+   - The module or chart doesn't meet specific requirements
 3. Document why raw resources are used instead
 
 #### Helm
 
 Search for Helm charts using `helm search hub <keyword>`.
 
+Document in table format:
 ```markdown
 | Service | Helm Chart Available? | Repository | Chart Name | Chart Version |
 |---------|----------------------|------------|------------|---------|
@@ -77,8 +78,9 @@ Search for Helm charts using `helm search hub <keyword>`.
 #### Terraform
 
 Search for private modules with `search_private_modules` (organization-specific only).
-Check latest stable version with `get_private_module details`.
+Check latest stable version with `get_private_module_details`.
 
+Document in table format:
 ```markdown
 | Resources | Module Source | Version |
 |---------|----------------------|------------|
@@ -93,14 +95,7 @@ For other Kubernetes resources not addressed by Helm charts:
 - Create a service account on Kubernetes for each service
 - Each service has its own namespace, do not deploy to default
 
-```markdown
-- Deployment
-- PVC
-- Service
-- ServiceAccount
-- Ingress
-- Secret
-```
+List required resources: Deployment, PVC, Service, ServiceAccount, Ingress, Secret
 
 ### Other Terraform resources
 
@@ -114,35 +109,10 @@ with `get_provider_capabilities`.
 - If the user requests the resources be created on an existing resource,
 suggest a list of Terraform data sources to use.
 
-```markdown
-#### Providers
-
-| Provider | Version |
-|---------|----------|
-| `hashicorp/aws` | 6.43.0 |
-
-#### Data Sources
-
-- `data.aws_ami`
-- `data.aws_availability_zones`
-- `data.aws_region`
-- `data.aws_caller_identity`
-- `data.aws_elb_service_account`
-
-#### Resources
-
-Networking
-
-- `aws_vpc`
-- `aws_internet_gateway`
-- `aws_subnet` (public)
-- `aws_subnet` (private)
-- `aws_route_table` (public)
-- `aws_route_table` (private)
-- `aws_route_table_association` (public)
-- `aws_route_table_association` (private)
-- `aws_route`
-```
+Document in sections:
+- Providers (name and version)
+- Data Sources (list)
+- Resources (organized by category: Networking, Compute, Storage, etc.)
 
 ### Checklist
 

@@ -7,16 +7,6 @@ description: Use podman instead of Docker for container testing
 
 **ALWAYS use `podman` instead of `Docker` when testing with containers.**
 
-### When Working with Containers
-
-Whenever you need to:
-- Build container images
-- Run containers for testing
-- Push/pull container images
-- Manage container lifecycle
-- Execute commands in containers
-- Inspect container logs or status
-
 ### Use Podman Commands
 
 Replace Docker commands with their Podman equivalents:
@@ -34,29 +24,6 @@ Replace Docker commands with their Podman equivalents:
 | `docker stop` | `podman stop` |
 | `docker rm` | `podman rm` |
 | `docker rmi` | `podman rmi` |
-
-### Example Usage
-
-```bash
-# Build an image
-podman build -t myapp:latest .
-
-# Run a container
-podman run -d -p 8080:8080 --name myapp myapp:latest
-
-# View running containers
-podman ps
-
-# Execute command in container
-podman exec -it myapp /bin/bash
-
-# View logs
-podman logs myapp
-
-# Stop and remove
-podman stop myapp
-podman rm myapp
-```
 
 ### Docker Compose Alternative
 

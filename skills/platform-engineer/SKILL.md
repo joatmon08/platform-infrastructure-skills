@@ -17,7 +17,7 @@ Generate Terraform and .tf files based on the architecture proposal outlined in 
 ## Phase 1: Implementation
 
 Activate the terraform-style-guide skill for more complete instructions on general best practices
-to write Terraform. Apply the following organzation-specific requirements as well.
+to write Terraform. Apply the following organization-specific requirements as well.
 
 ### 1.1 Generate provider blocks
 
@@ -52,7 +52,7 @@ variable "region" {
 }
 ```
 
-**NEVER guess on defaults tags. If you do not know, prompt the user to specify the correct tags.**
+**NEVER guess on default tags. If you do not know, prompt the user to specify the correct tags.**
 
 #### Kubernetes provider block
 
@@ -98,110 +98,27 @@ terraform {
 }
 ```
 
-### Example
+### 1.3 File Structure
 
-```hcl
-# terraform.tf
-terraform {
-  required_version = ">= 1.14"
+Organize Terraform code into standard files:
+- `terraform.tf` - Required providers and versions
+- `backend.tf` - HCP Terraform configuration
+- `variables.tf` - Input variables
+- `locals.tf` - Local values
+- `main.tf` - Primary resources
+- `outputs.tf` - Output values
 
-  required_providers {
-    aws = {
-      source  = "hashicorp/aws"
-      version = "~> 6.0"
-    }
-  }
-}
-
-provider "aws" {
-  region = var.region
-
-  tags {
-    default_tags = {
-      ManagedBy    = "Terraform"
-      Environment  = "nonprod"
-      OwnedBy      = "rosemary"
-      BusinessUnit = "publishing"
-      Project      = "some-project"
-      Purpose      = "test"
-    }
-  }
-}
-
-# variables.tf
-variable "region" {
-  type        = string
-  description = "AWS region"
-}
-
-# locals.tf
-locals {
-  azs = slice(data.aws_availability_zones.available.names, 0, length(var.vpc_private_subnets))
-}
-
-# main.tf
-data "aws_availability_zones" "available" {
-  state = "available"
-}
-
-data "aws_ami" "ubuntu" {
-  most_recent = true
-
-  filter {
-    name   = "name"
-    values = ["ubuntu/images/hvm-ssd/ubuntu-jammy-22.04-amd64-server-*"]
-  }
-
-  filter {
-    name   = "virtualization-type"
-    values = ["hvm"]
-  }
-
-  owners = local.owners
-}
-
-resource "aws_instance" "example" {
-  ami           = data.aws_ami.ubuntu.id
-  instance_type = "t3.micro"
-
-  tags = {
-    Name = "HelloWorld"
-  }
-}
-
-module "vpc" {
-  source  = "terraform-aws-modules/vpc/aws"
-  version = "~> 6.6"
-
-  name = "${var.cluster_name}-vpc"
-  cidr = var.vpc_cidr
-
-  azs             = local.azs
-  private_subnets = var.vpc_private_subnets
-  public_subnets  = var.vpc_public_subnets
-
-  enable_nat_gateway   = true
-  single_nat_gateway   = false
-  enable_dns_hostnames = true
-  enable_dns_support   = true
-}
-
-# outputs.tf
-output "vpc_id" {
-  description = "ID of the created VPC"
-  value       = aws_vpc.main.id
-}
-```
+Refer to terraform-style-guide skill for detailed patterns and examples.
 
 ---
 
 ## Phase 2: Review and Test
 
-Run `terraform init -nocolor` to initialize the state.
+Run `terraform init -no-color` to initialize the state.
 
 Run `terraform fmt -recursive` to format the configuration.
 
-Run `terraform validate -nocolor` to validate the configuration.
+Run `terraform validate -no-color` to validate the configuration.
 If validate fails, try to fix and re-validate before proceeding
 to plan.
 

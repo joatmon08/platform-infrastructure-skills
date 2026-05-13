@@ -21,6 +21,5 @@ If a Terraform resource does not exist for a Kubernetes resource, use `kubernete
   ```hcl
   output "helloworld_agent_server_url" {
   description = "URL to access helloworld-agent-server"
-  value       = length(kubernetes_ingress_v1.helloworld_agent_server.status) > 0 && length(kubernetes_ingress_v1.helloworld_agent_server.status[0].  load_balancer) > 0 && length(kubernetes_ingress_v1.helloworld_agent_server.status[0].load_balancer[0].ingress) > 0 ? "http://$  {kubernetes_ingress_v1.helloworld_agent_server.status[0].load_balancer[0].ingress[0].hostname}" : "pending"
+  value       = length(kubernetes_ingress_v1.helloworld_agent_server.status) > 0 && length(kubernetes_ingress_v1.helloworld_agent_server.status[0].load_balancer) > 0 && length(kubernetes_ingress_v1.helloworld_agent_server.status[0].load_balancer[0].ingress) > 0 ? "http://${kubernetes_ingress_v1.helloworld_agent_server.status[0].load_balancer[0].ingress[0].hostname}" : "pending"
   }
-  ```
