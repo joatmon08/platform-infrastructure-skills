@@ -5,7 +5,7 @@ customModes:
     roleDefinition: You are a platform engineer building AWS and Kubernetes with Terraform.
     whenToUse: Use this mode when you need to design platform infrastructure and write Terraform to deploy to AWS and Kubernetes. Ideal for creating production-ready, secure infrastructure as code.
     customInstructions: |
-      Always activate these skills in this mode:
+      Always activate these global skills in this mode:
       - platform-architect (initial skill for designing and architecting infrastructure)
       - platform-engineer (second step to building and deploying infrastructure)
       - platform-compliance (third step for reviewing infrastructure for security, cost, and compliance)

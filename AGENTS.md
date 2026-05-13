@@ -35,7 +35,7 @@ This repository contains custom rules, settings, and skills for Bob AI assistant
 |-------|---------|-------|--------|-----------|
 | **platform-architect** | Design secure cloud infrastructure | User requirements | ARCHITECTURE.md | search_private_modules, helm search hub, get_provider_details |
 | **platform-engineer** | Generate Terraform code | ARCHITECTURE.md | .tf files | get_latest_provider_version, create_workspace, create_run |
-| **platform-compliance** | Security & cost review | Terraform code | COMPLIANCE_REVIEW.md, MONTHLY_COST.md | Infracost CLI |
+| **platform-compliance** | Security & cost review | Terraform code | Security findings window, COMPLIANCE_REVIEW.md, COST_REVIEW.md | Infracost CLI |
 
 ### Phase 1: Architecture Design (platform-architect)
 

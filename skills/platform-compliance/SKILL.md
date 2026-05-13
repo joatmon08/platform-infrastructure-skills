@@ -18,8 +18,9 @@ Output the plan for deploying and implementing infrastructure in a proposal docu
 
 ## Phase 1: Security Review
 
-Perform a code review on the Terraform configuration
-and provide a list of suggestions on how to improve its security.
+**ALWAYS use the security findings window for security code review. DO NOT write security findings to COMPLIANCE_REVIEW.md.**
+
+Perform a security code review on the Terraform configuration using the security findings window.
 
 Consider:
 
@@ -30,15 +31,17 @@ Consider:
 - Public exposure of resources
 - Logging and monitoring configuration
 
+The security findings window will automatically track and display security issues.
+
 Before proceeding to Phase 2, verify:
-- [ ] User has acknowledged security findings and recommendations
+- [ ] User has acknowledged security findings from the security findings window
 
 ## Phase 2: Compliance Evaluation
 
 Evaluate the Terraform configuration for compliance according to
 the organization's policies.
 
-Verify the following:
+Write compliance findings to `COMPLIANCE_REVIEW.md`:
 
 - [ ] All resources have required tags (ManagedBy, Environment, OwnedBy, BusinessUnit, Project, Purpose)
 - [ ] Secrets stored in AWS Secrets Manager (not hardcoded)
@@ -55,7 +58,8 @@ infracost breakdown --path . --format table
 
 If Infracost CLI provides a $0.00 cost estimate, verify with AWS pricing.
 
-**Cost Analysis Guidelines:**
+Write cost findings to `COST_REVIEW.md`:
+
 - Include monthly cost estimates in the review
 - Highlight any resources with significant costs (>$100/month)
 - Note any resources with variable costs based on usage
@@ -64,7 +68,7 @@ If Infracost CLI provides a $0.00 cost estimate, verify with AWS pricing.
 
 ### Checklist
 
-- [ ] User has corrected high-priority issues based on recommendations
+- [ ] User has corrected high-priority issues based on security findings window
 - [ ] User has justified high-priority violations with inline comment
       ```
       ## Justification: The Helm chart does not contain overrides for an Ingress configuration.
@@ -72,9 +76,12 @@ If Infracost CLI provides a $0.00 cost estimate, verify with AWS pricing.
 
 ### Example
 
-Refer to `EXAMPLE.md` for a full example of how to structure the compliance review.
+Refer to `COMPLIANCE_EXAMPLE.md` for a full example of how to structure the compliance review (excluding security findings which go in the security findings window).
+
+
+Refer to `COST_EXAMPLE.md` for a full example of how to structure the cost review (excluding security findings which go in the security findings window).
 
 ## Recovery
 
-If the user does not remediate as per `COMPLIANCE_REVIEW.md`, prompt the user for feedback and suggest
+If the user does not remediate as per security findings window or `COMPLIANCE_REVIEW.md`, prompt the user for feedback and suggest
 escalation to the security team.
