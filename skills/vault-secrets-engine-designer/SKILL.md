@@ -5,149 +5,154 @@ description: Guide for designing secrets engine plugins for IBM Vault (HashiCorp
 
 # IBM Vault Secrets Engine Designer
 
-## Overview
+Design secrets engine plugins for credential lifecycle management. Output: `ARCHITECTURE.md`
 
-Design secrets engine plugins that allow Vault to create and revoke passwords, API tokens, certificates, JWTs, and encryption keys. This skill writes the intended design
-to `ARCHITECTURE.md`.
+## Prerequisites
 
-## Process
+**REQUIRED: Request from user before starting:**
+1. Service API documentation (URL or file path)
+2. Authentication method for service API
+3. Credential types needed (tokens, keys, certificates)
+4. Any known limitations or constraints
 
-### Phase 1: Research
+## Design Process
 
-1. Review the service's API documentation for credential or token endpoints, authentication requirements, and identities.
-2. Determine you need to extend an existing Vault secrets engine or require a new Vault secrets engine.
-  - If the service API needs an encryption key, consider using Vault's [transit secrets engine](https://developer.hashicorp.com/vault/docs/secrets/transit)
-    to generate a key.
-  - If the service API needs a certificate, consider using Vault's [PKI secrets engine](https://developer.hashicorp.com/vault/docs/secrets/pki) to generate a certificate.
-  - If the service API needs a JWT, consider configuring Vault's [identity secrets engine](https://developer.hashicorp.com/vault/docs/secrets/identity) to populate the claims.
-3. If the service API can only generate one secret at a time, the secrets engine manages static secrets. If a service API can create and delete secrets, the secrets engine can be dynamic.
-4. Beware of multiple IDs in the same system
-5. Check if generating credentials leads to unintended revocation from the service API
+### 1. API Analysis
 
-Checklist:
-- [ ] Outline any uncertainties in architecture or credential issuance
-- [ ] Make note of calls to other Vault secrets engines, as they require a Vault token for access
+Review service API documentation for:
+- Credential creation/deletion endpoints
+- Token/key lifecycle (create, update, revoke)
+- Identity model (user, team, organization scopes)
+- Authentication requirements
+- Rate limits or constraints
 
-### Phase 2: Domain Modeling
+**Decision Points:**
+- Can service create/delete multiple credentials? → Dynamic secrets
+- Only one credential at a time? → Static secrets (needs rotate-role endpoint)
+- No deletion endpoint? → Static secrets (returns same credential)
 
-Vault has the following domain model for secrets engines.
+**Reuse Existing Engines:**
+- Encryption keys → [transit engine](https://developer.hashicorp.com/vault/docs/secrets/transit)
+- Certificates → [PKI engine](https://developer.hashicorp.com/vault/docs/secrets/pki)
+- JWTs → [identity engine](https://developer.hashicorp.com/vault/docs/secrets/identity)
 
-- Backend: Physical storage of secrets.
-- Configuration: Configuration for the secrets engine, including authentication to service API.
-- Role: Identity with a set of permissions, groups, or policies you want to attach a user of the secrets engine.
-- Credentials: Secret created or deleted by Vault using the service API.
+### 2. Domain Mapping
 
-Determine which domain model elements are relevant to the service API.
+Map service API to Vault domain model:
 
-- If a service API has an identity domain model with global, team, and user-scoped credentials,
-  set the global, team, or user identifier as options in the role.
-- If a service API only generates one token at a time, note that you need to create a `rotate-role` endpoint
-  for a user to call Vault to manually rotate the credentials.
-- If a service API has no endpoint to delete credentials, note that the secrets engine returns the same credential
-  like a database static role.
+| Vault Concept | Purpose | Required Fields |
+|---------------|---------|-----------------|
+| **Config** | Service API connection | `address`, `token`, `default_ttl`, `default_max_ttl` (dynamic only) |
+| **Role** | Permission template | Identity attributes, `ttl`, `max_ttl` (dynamic only) |
+| **Credentials** | Secret generation | Varies by service API |
 
-Checklist:
--[] Verify each credential endpoint maps to a real service API call and confirm revocation paths exist for dynamic secrets.
+**Identity Mapping:**
+- Global/team/user scopes → Role configuration options
+- Permission groups/policies → Role attributes
+- IP restrictions/metadata → Role constraints
 
-### Phase 3: API Interface
+### 3. API Endpoints
 
-- `<path>/config`: describe how secrets engine connects to service API. Required fields for dynamic secrets: `default_ttl`, `default_max_ttl`
-- `<path>/role/<name>`: describe how secrets engine creates and deletes credentials. Include user, group, or other identity attributes. Required fields for dynamic secrets: `ttl`, `max_ttl`
-- `<path>/creds/<role-name>`: describe how secrets engine rotates credentials
+Define Vault API interface:
 
-Checklist:
-- [ ] Verify each credential endpoint maps to a real service API call and confirm revocation paths exist for dynamic secrets.
+```
+POST   <mount>/config              # Configure service connection
+GET    <mount>/config              # Read configuration
+POST   <mount>/roles/:name         # Create/update role
+GET    <mount>/roles/:name         # Read role
+LIST   <mount>/roles               # List roles
+DELETE <mount>/roles/:name         # Delete role
+GET    <mount>/creds/:role         # Generate credentials
+POST   <mount>/rotate-root         # Rotate root credentials (optional)
+POST   <mount>/rotate-role/:name   # Rotate static credentials (static only)
+```
 
-## Example
-
-Below is the example `ARCHITECTURE.md`.
+## ARCHITECTURE.md Template
 
 ```markdown
-# HCP Terraform Secrets Engine
+# [Service] Secrets Engine
 
-This secrets engine creates and deletes HCP Terraform API tokens.
+[Brief description of what credentials this engine manages]
+
+## Service API Summary
+- Base URL: [URL]
+- Authentication: [method]
+- Credential Types: [list]
+- Lifecycle: [create/update/delete capabilities]
 
 ## Configuration
 
-```text
-POST terraform/config
-Body:
+POST <mount>/config
 {
-  address: https://app.terraform.io,
-  token: abc-1234,
-  default_ttl: 3600,
-  default_max_ttl: 5200
+  "address": "https://api.service.com",
+  "token": "service-api-token",
+  "default_ttl": 3600,        # dynamic only
+  "default_max_ttl": 86400    # dynamic only
 }
-Response: 204 No Content
-```
 
-## Role
+## Roles
 
-```text
-POST terraform/roles/:team_role_name
-Body:
+POST <mount>/roles/:name
 {
-  team_id: tf-team-1234,
-  ttl: 3600,
-  max_ttl: 5200,
-  organization: my-unique-tf-org, # optional
+  "ttl": 3600,                # dynamic only
+  "max_ttl": 86400,           # dynamic only
+  [service-specific fields]
 }
-Response: 204 No Content
-```
-
-```text
-GET terraform/roles/:team_role_name
-Response: 200 OK
-{
-  team-id: tf-team-1234,
-  ttl: 3600,
-  max_ttl: 5200,
-  organization: my-unique-tf-org,
-}
-```
 
 ## Credentials
 
-### Generate team token
-
-Team tokens are static secrets and do not have a lease.
-
-```text
-GET terraform/creds/:team_role_name
-Response: 200 OK
+GET <mount>/creds/:role
+Response (dynamic):
 {
-# no lease fields
+  "lease_id": "<mount>/creds/:role/...",
+  "lease_duration": 3600,
+  "renewable": true,
   "data": {
-    "token_id": "team-132ae3ef"
-    "token": "132ae3ef-5a64-7499-351e-bfe59f3a2a21"
-  },
-}
-```
-
-### Generate user token
-
-User tokens are dynamic and have a lease.
-
-```text
-GET terraform/creds/:user_role_name
-Response: 200 OK
-{
-  # lease fields
-  lease_id: terraform/creds/my-user-role/HZ8edrojluU1fzVy7GWoIUpo,
-  lease_duration:3600,
-  data: {
-    token_id: "user-132ae3ef"
-    token: 132ae3ef-5a64-7499-351e-bfe59f3a2a21,
+    [credential fields]
   }
 }
+
+Response (static):
+{
+  "data": {
+    [credential fields]
+  }
+}
+
+## Implementation Notes
+
+### Service API Calls
+- Create: [endpoint and method]
+- Update: [endpoint and method] # if supported
+- Delete: [endpoint and method]
+
+### Lease Renewal
+[Describe renewal behavior for dynamic secrets]
+
+### Revocation
+[Describe revocation process]
+
+### Error Handling
+[Known error conditions and handling]
+
+## Security Considerations
+- [List security concerns]
+- [Credential storage notes]
+- [Permission requirements]
 ```
 
-```
+## Checklist
+
+Before completing:
+- [ ] All service API endpoints mapped to Vault operations
+- [ ] Revocation path confirmed for dynamic secrets
+- [ ] Identity/permission model clearly defined
+- [ ] Lease renewal behavior specified (dynamic only)
+- [ ] Error conditions documented
+- [ ] Security considerations noted
 
 ## References
-
-- [Define a backend for the secrets engine](https://developer.hashicorp.com/vault/tutorials/custom-secrets-engine/custom-secrets-engine-backend)
-- [Define a configuration for the secrets engine](https://developer.hashicorp.com/vault/tutorials/custom-secrets-engine/custom-secrets-engine-config)
-- [Define roles for the secrets engine](https://developer.hashicorp.com/vault/tutorials/custom-secrets-engine/custom-secrets-engine-role)
-- [Implement secrets for the secrets engine](https://developer.hashicorp.com/vault/tutorials/custom-secrets-engine/custom-secrets-engine-secrets)
-- [Define credentials for the secrets engine](https://developer.hashicorp.com/vault/tutorials/custom-secrets-engine/custom-secrets-engine-creds)
+- [Backend](https://developer.hashicorp.com/vault/tutorials/custom-secrets-engine/custom-secrets-engine-backend)
+- [Config](https://developer.hashicorp.com/vault/tutorials/custom-secrets-engine/custom-secrets-engine-config)
+- [Roles](https://developer.hashicorp.com/vault/tutorials/custom-secrets-engine/custom-secrets-engine-role)
+- [Credentials](https://developer.hashicorp.com/vault/tutorials/custom-secrets-engine/custom-secrets-engine-creds)
