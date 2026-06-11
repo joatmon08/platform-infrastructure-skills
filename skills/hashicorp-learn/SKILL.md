@@ -1,6 +1,6 @@
 ---
 name: hashicorp-learn
-description: Interview the user relentlessly about a HashiCorp tutorial until reaching shared understanding, resolving each branch of the decision tree. Use when user wants to learn a tutorial in-depth, get grilled on their understanding, or mentions "grill me".
+description: Interview the user relentlessly about a HashiCorp tutorial until reaching shared understanding, resolving each branch of the decision tree. Use when user wants to learn a tutorial in-depth, get quizzed on their understanding, or mentions "quiz me".
 ---
 
 Always ask for a link to the official tutorial on developer.hashicorp.com.
