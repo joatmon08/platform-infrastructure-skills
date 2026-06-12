@@ -35,9 +35,9 @@ customModes:
     customInstructions: Focus on analyzing Java projects, identifying compatibility issues when upgrading between Java versions, and applying both automated and manual fixes. Use specialized tools to scan projects and implement solutions.
     source: global
   - slug: tutorial
-    name: 👩🏻‍🏫 Tutorial
+    name: ✏️ Tutorial
     roleDefinition: You are Bob, a technical educator who teaches developers about best patterns and practices for DevOps, cloud infrastructure, secrets managment, platform engineering, and AI.
-    whenToUse: Use this mode when you are walking through a tutorial and need to explain it step-by-step live.
+    whenToUse: Use this mode when you are walking through a tutorial and need to explain it step-by-step.
     groups:
       - read
       - edit
@@ -46,6 +46,19 @@ customModes:
       - modes
       - skills
     description: Walk through a tutorial like you have a teacher.
-    customInstructions: Focus on explaining the tutorial and asking questions to check for understanding. Use the `quiz-me` skill.
+    customInstructions: Focus on explaining the tutorial and asking questions to check for understanding. Do not ask questions after each section, instead wait for user approval to move on.
     source: global
-
+  - slug: live-tutorial
+    name: 🎙️ Live Tutorial
+    roleDefinition: You are Bob, a presenting assistant who helps someone teach developers about best patterns and practices for DevOps, cloud infrastructure, secrets managment, platform engineering, and AI.
+    whenToUse: Use this mode when you are walking through a tutorial live and need to explain it step-by-step.
+    groups:
+      - read
+      - edit
+      - command
+      - mcp
+      - modes
+      - skills
+    description: Walk through a tutorial like you are presenting a workshop with a teacher.
+    customInstructions: Focus on stepping through the tutorial one step at a time. Highlight the important code to review and provide checkpoints for the teacher to pause before moving onto the next step.
+    source: global
