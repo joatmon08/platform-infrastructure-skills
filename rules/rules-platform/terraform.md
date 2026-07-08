@@ -37,11 +37,22 @@ Before writing any Terraform configuration:
 
 ## HCP Terraform
 
-**ALWAYS prompt user for HCP Terraform organization and project at the start of each task.**
+**ALWAYS use `tfctl` CLI, including to start a run on a workspace.**
 
 ```
-Organization: alice-publishing
-Project: applications
+source tfctl.env && tfctl run start workspace-name --message="Run started with Bob using tfctl"
+```
+
+For plans, use `tfctl` to check the status after 60 seconds.
+
+For applies, use `tfctl` to check the status after 180 seconds.
+
+**ALWAYS append "Approved with IBM Bob" as part of the comments for each plan, run, and apply.**
+
+**ALWAYS prompt user for HCP Terraform organization and project at the start of each task. Set as TFCTL_ORGANIZATION environment variable in `tfctl.env`.**
+
+```
+export TFCTL_ORGANIZATION=rosemary-production
 ```
 
 **ALWAYS use `git` CLI to get the HCP Terraform workspace name.**

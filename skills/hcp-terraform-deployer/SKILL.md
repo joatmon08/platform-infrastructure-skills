@@ -1,6 +1,6 @@
 ---
 name: hcp-terraform-deployer
-description: Skill for planning, applying, and monitoring Terraform deployment. Use this skill for deploying infrastructure changes to HCP Terraform workspaces or monitoring current plans and applies through the Terraform MCP Server.
+description: Skill for planning, applying, and monitoring Terraform deployment. Use this skill for deploying infrastructure changes to HCP Terraform workspaces or monitoring current plans and applies through tfctl.
 ---
 
 # HCP Terraform Deployer
@@ -8,7 +8,7 @@ description: Skill for planning, applying, and monitoring Terraform deployment. 
 ## Overview
 
 Follow a to-do list to start a run, review a plan, and apply the changes to
-a Terraform workspace with the Terraform MCP server.
+a Terraform workspace with `tfctl`.
 
 1. Verify that the Terraform MCP server is available.
 2. Verify the HCP Terraform organization

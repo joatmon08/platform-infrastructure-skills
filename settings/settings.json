@@ -1,0 +1,44 @@
+{
+  "approval": {
+    "allowed_permissions": [
+      "read",
+      "execute",
+      "edit",
+      "mcp",
+      "mode",
+      "subtask",
+      "subagent",
+      "skill",
+      "todo"
+    ],
+    "allowedExecutors": [
+      {
+        "toolId": "execute_command",
+        "approvedCommands": [
+          "cat",
+          "git diff",
+          "git log",
+          "git rev-parse",
+          "git show",
+          "git status",
+          "grep",
+          "head",
+          "tail",
+          "ls",
+          "sort",
+          "wc",
+          "which",
+          "du",
+          "df",
+          "sleep",
+          "tfctl run status run-kTzw7ZG5sFrJAksv --json"
+        ],
+        "deniedCommands": []
+      }
+    ]
+  },
+  "migrations": {
+    "commands": true,
+    "legacyBobCodeTaskMigrationDone": true
+  }
+}

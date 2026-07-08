@@ -1,3 +1,4 @@
-settings/mcp_settings.json
+settings/mcp*.json
 rules/ibm.md
 rules/security.md
+db/
