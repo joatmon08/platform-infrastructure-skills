@@ -31,7 +31,7 @@
           "du",
           "df",
           "sleep",
-          "tfctl run status run-kTzw7ZG5sFrJAksv --json"
+          "tfctl run status"
         ],
         "deniedCommands": []
       }
