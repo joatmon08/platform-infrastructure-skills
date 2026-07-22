@@ -3,6 +3,24 @@ name: terraform
 description: Generate Terraform according to organization's best practices
 ---
 
+## Skills
+
+**ALWAYS activate the following skills and prompts before writing Terraform code:**
+
+1. **`tfctl` skill** — activate via `use_skill` for all HCP Terraform interactions (runs, workspaces, variables, policy checks).
+2. **`/terraform/style-guide` prompt** — call this MCP prompt to apply HashiCorp's official Terraform style conventions before generating any `.tf` files.
+3. **`/terraform/module-development` prompt** — call this MCP prompt when creating or modifying Terraform modules to follow module development best practices.
+
+## Terraform Version
+
+**ALWAYS require Terraform 1.15 or higher** in the `terraform` block:
+
+```hcl
+terraform {
+  required_version = ">= 1.15"
+}
+```
+
 ## Providers
 
 **ALWAYS use `get_latest_provider_version` tool before generating Terraform code.**
@@ -14,12 +32,13 @@ Before writing any Terraform configuration:
 
 ## Modules
 
-1. **Search for private modules** using `search_private_modules`
+1. **Search for private modules first** using `search_private_modules`
 2. **Write native Terraform resources** using official provider documentation
-3. **Search for public modules** using `search_public_modules`. Approved namespaces include:
+3. **Search for public modules** using `search_public_modules` when no private module exists. Approved namespaces include:
    - `terraform-aws-modules`
    - `azure`
-   - 
+   - `terraform-google-modules`
+4. **Create custom local modules** in `modules/` directory for reusable components
 
 ### Required Actions:
 - ✅ Write `resource` blocks directly
@@ -70,9 +89,3 @@ terraform validate -no-color
 terraform plan -no-color
 terraform apply -no-color
 ```
-
-## Security Scanning
-
-**NEVER use tfsec, as not approved. Scans will be done in HCP Terraform using Sentinel policy sets.**
-
-For specific organization policies, refer to the [organization's Sentinel policy set](https://github.com/joatmon08/terraform-aws-kubernetes/tree/main/policies).
