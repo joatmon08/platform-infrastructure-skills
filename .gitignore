@@ -4,3 +4,15 @@ rules/security.md
 db/
 
 .DS_Store
+
+# Skills from upstream
+skills/codebase-design
+skills/diagnosing-bugs
+skills/domain-modeling
+skills/grill-me
+skills/grill-with-docs
+skills/grilling
+skills/improve-codebase-architecture
+skills/research
+skills/tdd
+skills/teach

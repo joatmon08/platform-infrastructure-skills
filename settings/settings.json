@@ -31,14 +31,14 @@
           "du",
           "df",
           "sleep",
-          "tfctl run status"
+          "tfctl run status",
+          "tfctl"
         ],
         "deniedCommands": []
       }
     ]
   },
   "migrations": {
-    "commands": true,
     "legacyBobCodeTaskMigrationDone": true
   }
 }
